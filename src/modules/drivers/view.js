@@ -55,19 +55,27 @@ class DriversPage extends Component {
 
   _generatePages = () => {
     const totalPages = Math.round(this.props.drivers.total / this.props.drivers.limit);
-    const currentPage = this.props.drivers.offset + 1
+    const currentPage = +this.props.drivers.offset + 1
+
+    if (currentPage === 1){
+      return [
+        { number: currentPage},
+        { number: currentPage + 1},
+        { number: currentPage + 2}
+      ]
+    }
+    if (currentPage === totalPages){
+      return [
+        { number: currentPage - 2},
+        { number: currentPage - 1},
+        { number: currentPage}
+      ]
+    }
     if (this.props.drivers.offset >= this.props.drivers.total ) {
       return [
         { number: Math.round(this.props.drivers.total / this.props.drivers.offset - 2)},
         { number: Math.round(this.props.drivers.total / this.props.drivers.offset - 1)},
         { number: Math.round(this.props.drivers.total / this.props.drivers.offset)}
-      ];
-    }
-    if (this.props.drivers.offset < this.props.drivers.total && (totalPages - this.props.drivers.offset) > 3) {
-      return [
-        { number: Math.round((totalPages / currentPage) - 2)},
-        { number: Math.round((totalPages / currentPage) - 1)},
-        { number: Math.round(totalPages / currentPage)}
       ];
     }
   }
