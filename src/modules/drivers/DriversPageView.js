@@ -6,7 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import Paginator from '../../components/paginator/paginator';
 
-class DriversPage extends Component {
+class DriversPageView extends Component {
 
   state = {
       showPaginator: false
@@ -41,7 +41,7 @@ class DriversPage extends Component {
           color="#e74c3c"
         />
         <CardButton
-          onPress={() => {}}
+          onPress={() => {this.props.navigation.navigate('DraverInfo', {driverId: item.driverId})}}
           title="Info"
           color="#e74c3c"
         />
@@ -177,4 +177,4 @@ const styles = EStyleSheet.create({
 EStyleSheet.build();
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(DriversPage);
+export default connect(mapStateToProps, mapDispatchToProps)(DriversPageView);

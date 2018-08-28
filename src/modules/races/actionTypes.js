@@ -1,0 +1,3 @@
+export const DRIVER_INFO_FETCHING = 'DRIVER_INFO_FETCHING';
+export const ADD_DRIVER_INFO = 'ADD_DRIVER_INFO';
+export const SET_ERRORS = 'SET_ERRORS';
