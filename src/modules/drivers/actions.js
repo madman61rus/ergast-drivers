@@ -35,7 +35,7 @@ const setLimit = (limit) => {
   }
 }
 
-const setOffset = (offset) => {
+export const setOffset = (offset) => {
   return {
     type: types.SET_OFFSET,
     payload: offset

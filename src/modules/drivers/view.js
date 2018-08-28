@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View,ActivityIndicator,Text,FlatList,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import {fetchDrivers} from './actions';
+import {fetchDrivers, setOffset} from './actions';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import Paginator from '../../components/paginator/paginator';
@@ -48,6 +48,10 @@ class DriversPage extends Component {
       </CardAction>
   </Card>
   );
+
+  onPageClick = (index) => {
+    this.props.setOffset(index * this.props.drivers.limit )
+  }
 
   __changeFlatIndex = ({viewableItems}) => {
     console.log('end reached');
@@ -119,7 +123,7 @@ class DriversPage extends Component {
         }
         { this.state.showPaginator &&
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Paginator pages={this._generatePages()} />
+            <Paginator onPageClick={this.onPageClick} pages={this._generatePages()} />
           </View>
         }
       </View>
@@ -137,6 +141,9 @@ const mapDispatchToProps = (dispatch) => {
     fetchDrivers: (limit, offset) => {
       dispatch(fetchDrivers(limit, offset))
     },
+    setOffset: (offset) => {
+      dispatch(setOffset(offset))
+    }
   }
 }
 
