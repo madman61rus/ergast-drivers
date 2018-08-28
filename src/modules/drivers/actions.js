@@ -10,11 +10,10 @@ const driversIsFetching = (state) => {
   }
 }
 
-const fetchDriversSuccess = (response) => {
-  console.log('response ', response)
+const fetchDriversSuccess = (drivers) => {
   return {
     type: types.ADD_DRIVERS,
-    payload: response.data.MRData.DriverTable.Drivers
+    payload: drivers
   }
 }
 
@@ -51,7 +50,10 @@ export const fetchDrivers = (limit = 30, offset = 0) => {
 
   axios.get(fullUrl)
     .then((response) => {
-      dispatch(fetchDriversSuccess(response))
+      dispatch(fetchDriversSuccess(response.data.MRData.DriverTable.Drivers))
+      dispatch(setTotal(response.data.MRData.total))
+      dispatch(setLimit(response.data.MRData.limit))
+      dispatch(setOffset(response.data.MRData.offset))
     }).catch((error) => {
     dispatch(fetchDriversError(error))
   });
