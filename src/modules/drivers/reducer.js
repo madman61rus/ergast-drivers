@@ -3,9 +3,10 @@ import * as types from './actionTypes';
 const initState = {
   drivers: [],
   driverInfo: {},
-  limit: 0,
+  limit: 30,
   total: 0,
   offset: 0,
+  currentPage: 1,
   requesting: false,
   successful: false,
   errors: []
@@ -54,6 +55,12 @@ export default function driversReducer(state = initState, action) {
         successful: true,
         driverInfo: action.payload
       }
+    case types.SET_CURRENT_PAGE:
+      return {
+        ...state,
+        currentPage: action.payload.currentPage,
+        offset: action.payload.offset
+      }  
     case types.SET_ERRORS:
       return {
         ...state,

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View,ActivityIndicator,Text,FlatList,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import {fetchDrivers, setOffset} from './actions';
+import {fetchDrivers, setCurrentPage} from './actions';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Card, CardTitle, CardContent, CardAction, CardButton } from 'react-native-cards';
 import Paginator from '../../components/paginator/paginator';
@@ -15,12 +15,17 @@ class DriversPageView extends Component {
   componentDidMount() {
     //SetTimeout for show activity indicator
     setTimeout(
-    () => this.props.fetchDrivers(30,0),
+    () => this.props.fetchDrivers(30,this.props.drivers.offset),
     2000);
   }
 
-  componentDidUpdate() {
-    console.log(this.props)
+  componentDidUpdate(prevProps) {
+    if (prevProps.drivers.offset != this.props.drivers.offset){
+      this.setState({
+        showPaginator: false
+      })
+      this.props.fetchDrivers(30, this.props.drivers.offset);
+    }
   }
 
   _keyExtractor = (item, index) => item.driverId;
@@ -54,7 +59,11 @@ class DriversPageView extends Component {
   );
 
   onPageClick = (index) => {
-    this.props.setOffset(index * this.props.drivers.limit )
+    this.props.setCurrentPage(
+      index,
+      this.props.drivers.total, 
+      this.props.drivers.limit, 
+      this.props.drivers.offset)
   }
 
   __changeFlatIndex = ({viewableItems}) => {
@@ -63,29 +72,28 @@ class DriversPageView extends Component {
 
   _generatePages = () => {
     const totalPages = Math.round(this.props.drivers.total / this.props.drivers.limit);
-    const currentPage = +this.props.drivers.offset + 1
+    const currentPage = this.props.drivers.currentPage
 
     if (currentPage === 1){
       return [
-        { number: currentPage},
+        { number: currentPage, current: true},
         { number: currentPage + 1},
         { number: currentPage + 2}
       ]
-    }
-    if (currentPage === totalPages){
+    } else if (currentPage === totalPages){
       return [
         { number: currentPage - 2},
         { number: currentPage - 1},
-        { number: currentPage}
+        { number: currentPage, current: true}
+      ]
+    }else{
+      return [
+        { number: currentPage - 1},
+        { number: currentPage, current: true},
+        { number: currentPage + 1}
       ]
     }
-    if (this.props.drivers.offset >= this.props.drivers.total ) {
-      return [
-        { number: Math.round(this.props.drivers.total / this.props.drivers.offset - 2)},
-        { number: Math.round(this.props.drivers.total / this.props.drivers.offset - 1)},
-        { number: Math.round(this.props.drivers.total / this.props.drivers.offset)}
-      ];
-    }
+    
   }
 
   onViewableItemsChanged = ({ viewableItems, _ }) => {
@@ -102,7 +110,7 @@ class DriversPageView extends Component {
         <View style={styles.navbar}>
           <Text>Drivers</Text>
         </View>
-        { this.props.drivers.requesting && this.props.drivers.drivers.length === 0 &&
+        { this.props.drivers.requesting &&
             <View style={styles.content}>
               <ActivityIndicator size="large" color="#e74c3c" />
             </View>
@@ -125,8 +133,8 @@ class DriversPageView extends Component {
 
         />
         }
-        { this.state.showPaginator &&
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        { this.state.showPaginator && !this.props.drivers.requesting &&
+          <View style={styles.paginator}>
             <Paginator onPageClick={this.onPageClick} pages={this._generatePages()} />
           </View>
         }
@@ -145,8 +153,8 @@ const mapDispatchToProps = (dispatch) => {
     fetchDrivers: (limit, offset) => {
       dispatch(fetchDrivers(limit, offset))
     },
-    setOffset: (offset) => {
-      dispatch(setOffset(offset))
+    setCurrentPage: (currentPage, total, limit, offset) => {
+      dispatch(setCurrentPage(currentPage, total, limit, offset))
     }
   }
 }
@@ -175,6 +183,10 @@ const styles = EStyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  paginator: {
+    flexDirection: 'row', 
+    justifyContent: 'center'
   }
 });
 

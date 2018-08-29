@@ -57,6 +57,20 @@ export const setOffset = (offset) => {
   }
 }
 
+export const setCurrentPage = (currentPage, total, limit, offset) => {
+  if (currentPage <= Math.round(total / limit))
+  {
+    return {
+      type: types.SET_CURRENT_PAGE,
+      payload: {
+        currentPage,
+        offset: limit * currentPage
+      }
+    }
+  }
+}
+
+
 export const fetchDrivers = (limit = 30, offset = 0) => {
   return dispatch => {
   dispatch(driversIsFetching(true))

@@ -8,9 +8,9 @@ import {
 const Paginator = ({pages, onPageClick}) => {
   const buttons = pages.map((page, index) =>
     (
-      <View style={{paddingHorizontal: 10}} key={index}>
+      <View style={{paddingHorizontal: 20}} key={index}>
         <TouchableOpacity onPress={() => onPageClick(page.number)}>
-          <Text style={{fontSize: 25, color: 'blue'}}>{page.number}</Text>
+          <Text style={{fontSize: page.current ? 30 : 25, color: page.current ? 'black' : 'blue'}}>{page.number}</Text>
         </TouchableOpacity>
       </View>
     )

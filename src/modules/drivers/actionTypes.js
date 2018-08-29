@@ -2,6 +2,7 @@ export const ADD_DRIVERS = 'ADD_DRIVERS';
 export const SET_LIMIT = 'SET_LIMIT';
 export const SET_OFFSET = 'SET_OFFSET';
 export const SET_TOTAL = 'SET_TOTAL';
+export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 export const DRIVERS_FETCHING = 'DRIVERS_FETCHING';
 export const DRIVER_INFO_FETCHING = 'DRIVER_INFO_FETCHING';
 export const ADD_DRIVER_INFO = 'ADD_DRIVER_INFO';
