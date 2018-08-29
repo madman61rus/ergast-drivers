@@ -3,9 +3,15 @@ import axios from 'axios';
 import {SERVER_URL,GET_DRIVERS,GET_DRIVER_INFO} from '../../settings/urls';
 
 const driversIsFetching = (state) => {
-  console.log('driversIsFetching');
   return {
     type: types.DRIVERS_FETCHING,
+    payload: state
+  }
+}
+
+const driverInfoIsFetching = (state) => {
+  return {
+    type: types.DRIVER_INFO_FETCHING,
     payload: state
   }
 }

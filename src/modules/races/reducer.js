@@ -1,25 +1,27 @@
 import * as types from './actionTypes';
 
 const initState = {
-  driverInfo: {},
+  races: {},
   requesting: false,
   successful: false,
   errors: []
 } 
 
-export default function driversReducer(state = initState, action) {
+export default function racesReducer(state = initState, action) {
   switch (action.type) {
-    case types.DRIVER_INFO_FETCHING:
+    case types.RACES_FETCHING:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        successful: false
       }
-    case types.ADD_DRIVER_INFO:
+    case types.ADD_RACES:
+    console.log('ADD_RACES ', action.payload)
       return {
         ...state,
         requesting: false,
         successful: true,
-        driverInfo: action.payload
+        races: action.payload
       }
     case types.SET_ERRORS:
       return {

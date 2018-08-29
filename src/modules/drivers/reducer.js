@@ -16,7 +16,8 @@ export default function driversReducer(state = initState, action) {
     case types.DRIVERS_FETCHING:
       return {
         ...state,
-        requesting: action.payload
+        requesting: action.payload,
+        successful: false
       }
     case types.ADD_DRIVERS:
       return {
@@ -43,7 +44,8 @@ export default function driversReducer(state = initState, action) {
       case types.DRIVER_INFO_FETCHING:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        successful: false
       }
     case types.ADD_DRIVER_INFO:
       return {

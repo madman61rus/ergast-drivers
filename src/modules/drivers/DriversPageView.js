@@ -3,7 +3,7 @@ import {View,ActivityIndicator,Text,FlatList,TouchableOpacity} from 'react-nativ
 import {connect} from 'react-redux';
 import {fetchDrivers, setOffset} from './actions';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
+import { Card, CardTitle, CardContent, CardAction, CardButton } from 'react-native-cards';
 import Paginator from '../../components/paginator/paginator';
 
 class DriversPageView extends Component {
@@ -36,7 +36,11 @@ class DriversPageView extends Component {
         separator={true}
         inColumn={false}>
         <CardButton
-          onPress={() => {}}
+          onPress={() => {this.props.navigation.navigate('RacesInfo', 
+          {
+            driverId: item.driverId,
+            driverName: `${item.givenName} ${item.familyName}`})
+          }}
           title="Races"
           color="#e74c3c"
         />
@@ -85,7 +89,7 @@ class DriversPageView extends Component {
   }
 
   onViewableItemsChanged = ({ viewableItems, _ }) => {
-    if (viewableItems.slice(-1)[0].index < this.props.drivers.drivers.length - 1 && this.state.showPaginator){
+    if (viewableItems.slice(-1)[0] && viewableItems.slice(-1)[0].index < this.props.drivers.drivers.length - 1 && this.state.showPaginator){
       this.setState({
         showPaginator: false
       })

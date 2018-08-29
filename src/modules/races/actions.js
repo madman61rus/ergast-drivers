@@ -1,58 +1,33 @@
 import * as types from './actionTypes';
 import axios from 'axios';
-import {SERVER_URL,GET_DRIVER_INFO} from '../../settings/urls';
+import {SERVER_URL,GET_RACES_INFO} from '../../settings/urls';
 
-const driverInfoIsFetching = () => {
+const racesIsFetching = () => {
   return {
-    type: types.DRIVER_INFO_FETCHING
+    type: types.RACES_FETCHING
   }
 }
 
-const fetchDriverInfoSuccess = (drivers) => {
+const fetchRacesSuccess = (races) => {
   return {
-    type: types.ADD_DRIVERS,
-    payload: drivers
+    type: types.ADD_RACES,
+    payload: races
   }
 }
 
-const fetchDriversError = (error) => {
+const racesFetchingErrors = (errors) => {
   console.log('error ', error)
 }
 
-const setTotal = (total) => {
-  return {
-    type: types.SET_TOTAL,
-    payload: total
-  }
-}
-
-const setLimit = (limit) => {
-  return {
-    type: types.SET_LIMIT,
-    payload: limit
-  }
-}
-
-export const setOffset = (offset) => {
-  return {
-    type: types.SET_OFFSET,
-    payload: offset
-  }
-}
-
-export const fetchDriverInfo = (driverId) => {
+export const fetchRacesInfo = (driverId, limit = 30, offset = 0) => {
   return dispatch => {
-  dispatch(driversIsFetching(true))
+  dispatch(racesIsFetching(true))
 
-  const fullUrl = SERVER_URL + GET_DRIVER_INFO + `${driverId}.json`;
+  const fullUrl = SERVER_URL + GET_RACES_INFO+ `${driverId}/results.json?${limit}&${offset}`;
 
   axios.get(fullUrl)
     .then((response) => {
-        console.log('response ', response);
-      dispatch(fetchDriversSuccess(response.data.MRData.DriverTable.Drivers))
-      dispatch(setTotal(response.data.MRData.total))
-      dispatch(setLimit(response.data.MRData.limit))
-      dispatch(setOffset(response.data.MRData.offset))
+      dispatch(fetchRacesSuccess(response.data.MRData.RaceTable.Races))
     }).catch((error) => {
     dispatch(fetchDriversError(error))
   });
