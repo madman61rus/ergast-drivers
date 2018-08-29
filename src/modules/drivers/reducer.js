@@ -2,6 +2,7 @@ import * as types from './actionTypes';
 
 const initState = {
   drivers: [],
+  driverInfo: {},
   limit: 0,
   total: 0,
   offset: 0,
@@ -15,7 +16,7 @@ export default function driversReducer(state = initState, action) {
     case types.DRIVERS_FETCHING:
       return {
         ...state,
-        requesting: true
+        requesting: action.payload
       }
     case types.ADD_DRIVERS:
       return {
@@ -38,7 +39,24 @@ export default function driversReducer(state = initState, action) {
       return {
         ...state,
         limit: action.payload
-      }    
+      }
+      case types.DRIVER_INFO_FETCHING:
+      return {
+        ...state,
+        requesting: true
+      }
+    case types.ADD_DRIVER_INFO:
+      return {
+        ...state,
+        requesting: false,
+        successful: true,
+        driverInfo: action.payload
+      }
+    case types.SET_ERRORS:
+      return {
+        ...state,
+        errors: action.payload
+      }      
     default:
       return state
   }

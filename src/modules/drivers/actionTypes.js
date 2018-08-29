@@ -3,3 +3,6 @@ export const SET_LIMIT = 'SET_LIMIT';
 export const SET_OFFSET = 'SET_OFFSET';
 export const SET_TOTAL = 'SET_TOTAL';
 export const DRIVERS_FETCHING = 'DRIVERS_FETCHING';
+export const DRIVER_INFO_FETCHING = 'DRIVER_INFO_FETCHING';
+export const ADD_DRIVER_INFO = 'ADD_DRIVER_INFO';
+export const SET_ERRORS = 'SET_ERRORS';

@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
 import axios from 'axios';
-import {SERVER_URL,GET_DRIVERS} from '../../settings/urls';
+import {SERVER_URL,GET_DRIVERS,GET_DRIVER_INFO} from '../../settings/urls';
 
 const driversIsFetching = (state) => {
   console.log('driversIsFetching');
@@ -14,6 +14,15 @@ const fetchDriversSuccess = (drivers) => {
   return {
     type: types.ADD_DRIVERS,
     payload: drivers
+  }
+}
+
+const fetchDriverInfoSuccess = (driverInfo) => {
+  if (driverInfo[0]){
+    return {
+      type: types.ADD_DRIVER_INFO,
+      payload: driverInfo[0]
+    }
   }
 }
 
@@ -70,11 +79,8 @@ export const fetchDriverInfo = (driverId) => {
 
   axios.get(fullUrl)
     .then((response) => {
-        console.log('response ', response);
-      dispatch(fetchDriversSuccess(response.data.MRData.DriverTable.Drivers))
-      dispatch(setTotal(response.data.MRData.total))
-      dispatch(setLimit(response.data.MRData.limit))
-      dispatch(setOffset(response.data.MRData.offset))
+      console.log('response ', response);
+      dispatch(fetchDriverInfoSuccess(response.data.MRData.DriverTable.Drivers))
     }).catch((error) => {
     dispatch(fetchDriversError(error))
   });

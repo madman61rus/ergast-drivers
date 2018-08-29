@@ -12,6 +12,7 @@
     "react-native": "0.56.0",
     "react-native-cards": "^1.1.4",
     "react-native-extended-stylesheet": "^0.9.0",
+    "react-native-hyperlink": "^0.0.14",
     "react-navigation": "^2.12.1",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
