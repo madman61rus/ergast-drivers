@@ -66,10 +66,6 @@ class DriversPageView extends Component {
       this.props.drivers.offset)
   }
 
-  __changeFlatIndex = ({viewableItems}) => {
-    console.log('end reached');
-  }
-
   _generatePages = () => {
     const totalPages = Math.round(this.props.drivers.total / this.props.drivers.limit);
     const currentPage = this.props.drivers.currentPage

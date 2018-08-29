@@ -32,8 +32,11 @@ const fetchDriverInfoSuccess = (driverInfo) => {
   }
 }
 
-const fetchDriversError = (error) => {
-  console.log('error ', error)
+const fetchDriversError = (errors) => {
+  return {
+    type: types.DRIVERS_SET_ERRORS,
+    payload: errors
+  }
 }
 
 const setTotal = (total) => {
@@ -99,7 +102,6 @@ export const fetchDriverInfo = (driverId) => {
 
   axios.get(fullUrl)
     .then((response) => {
-      console.log('response ', response);
       dispatch(fetchDriverInfoSuccess(response.data.MRData.DriverTable.Drivers));
     }).catch((error) => {
     dispatch(fetchDriversError(error));

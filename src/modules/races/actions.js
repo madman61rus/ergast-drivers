@@ -59,6 +59,13 @@ export const resetRaces = () => {
   }
 }
 
+const fetchRacesError = (errors) => {
+  return {
+    type: types.RACES_SET_ERRORS,
+    payload: errors
+  }
+}
+
 export const fetchRacesInfo = (driverId, limit = 10, offset = 0) => {
   return dispatch => {
   dispatch(racesIsFetching(true))
@@ -67,13 +74,12 @@ export const fetchRacesInfo = (driverId, limit = 10, offset = 0) => {
 
   axios.get(fullUrl)
     .then((response) => {
-      console.log('response ', response);
       dispatch(fetchRacesSuccess(response.data.MRData.RaceTable.Races));
       dispatch(setTotal(response.data.MRData.total));
       dispatch(setLimit(response.data.MRData.limit));
       dispatch(setOffset(response.data.MRData.offset));
     }).catch((error) => {
-    dispatch(fetchDriversError(error))
+    dispatch(fetchRacesError(errors))
   });
 
   }
