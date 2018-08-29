@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, ActivityIndicator, TouchableOpacity, Linking } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {fetchDriverInfo} from './actions';
-import Hyperlink from 'react-native-hyperlink'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Card, CardTitle, CardContent, CardAction, CardButton } from 'react-native-cards';
 
 class DriverInfoView extends Component {
 
@@ -37,25 +37,27 @@ class DriverInfoView extends Component {
                 </View>
               }
               { !this.props.drivers.requesting && this.props.drivers.driverInfo &&
-              <View>
-                <View style={{marginVertical: 10}}>
-                <Text>name: </Text><Text style={styles.nameText}>{[driverInfo.givenName, ' ', driverInfo.familyName]}</Text>
-                </View>
-                <View style={{marginVertical: 10}}>
-                <Text>date of birth: </Text><Text style={styles.nameText}>{driverInfo.dateOfBirth}</Text>
-                </View>
-                <View style={{marginVertical: 10}}>
-                <Text>nationality: </Text><Text style={styles.nameText}>{driverInfo.nationality}</Text>
-                </View>
-                { driverInfo.permanentNumber &&
-                <View style={{marginVertical: 10}}>
-                <Text>permanent number: </Text><Text style={styles.nameText}>{driverInfo.permanentNumber}</Text>
-                </View>
-                }
-                <View style={{marginVertical: 10}}>
-                <Text>wiki: </Text><Hyperlink linkDefault={ true }><Text>{driverInfo.url}</Text></Hyperlink>
-                </View>
-              </View>
+
+              <Card>
+              <CardTitle
+                title={[driverInfo.givenName, ' ', driverInfo.familyName]}
+                subtitle={driverInfo.dateOfBirth}
+              />
+              <CardContent text={`
+              nationality: ${driverInfo.nationality}
+              permanent number: ${driverInfo.permanentNumber}
+              `} />
+              <CardAction
+              separator={true}
+              inColumn={false}>
+              <CardButton
+                onPress={() => Linking.openURL(driverInfo.url) }
+                title="Wiki"
+                color="#e74c3c"
+              />
+              </CardAction>
+              </Card>
+              
               }
             </View>
         );
@@ -98,6 +100,9 @@ const mapStateToProps = (state) => {
     },
     nameText: {
       fontSize: '1.2rem'
+    },
+    dobText: {
+      fontSize: '0.7rem'
     },
     navbarIcon: {
       justifyContent: 'flex-start', 

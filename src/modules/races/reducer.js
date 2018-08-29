@@ -1,7 +1,7 @@
 import * as types from './actionTypes';
 
 const initState = {
-  races: {},
+  races: [],
   limit: 10,
   total: 0,
   offset: 0,
@@ -20,7 +20,6 @@ export default function racesReducer(state = initState, action) {
         successful: false
       }
     case types.ADD_RACES:
-    console.log('ADD_RACES ', action.payload)
       return {
         ...state,
         requesting: false,

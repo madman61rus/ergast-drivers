@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, ActivityIndicator, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import {fetchRacesInfo,setCurrentPage} from './actions';
+import {fetchRacesInfo,setCurrentPage,resetRaces} from './actions';
 import { Card, CardTitle, CardContent, CardAction, CardButton } from 'react-native-cards';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -97,8 +97,8 @@ class RacesView extends Component {
   };
 
   goBack = () => {
-
-    this.props.navigation.goBack()
+    this.props.resetRaces();
+    this.props.navigation.goBack();
   }
 
   render() {
@@ -178,8 +178,10 @@ const styles = EStyleSheet.create({
     marginHorizontal: 10
   },
   paginator: {
-    flexDirection: 'row', 
-    justifyContent: 'center'
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
+    flexDirection: 'row'
   }
 });
 
@@ -197,6 +199,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     setCurrentPage: (currentPage, total, limit, offset) => {
       dispatch(setCurrentPage(currentPage, total, limit, offset))
+    },
+    resetRaces: () => {
+      dispatch(resetRaces())
     }
   }
 }

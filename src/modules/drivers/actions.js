@@ -64,7 +64,7 @@ export const setCurrentPage = (currentPage, total, limit, offset) => {
       type: types.DRIVERS_SET_CURRENT_PAGE,
       payload: {
         currentPage,
-        offset: limit * currentPage
+        offset: limit * currentPage - 1
       }
     }
   }

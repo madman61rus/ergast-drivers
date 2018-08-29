@@ -185,8 +185,11 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
   },
   paginator: {
-    flexDirection: 'row', 
-    justifyContent: 'center'
+    position: 'absolute',
+    bottom: 10,
+    right: 20,
+    alignSelf: 'center',
+    flexDirection: 'row'
   }
 });
 
