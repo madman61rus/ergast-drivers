@@ -27,17 +27,17 @@ export default function driversReducer(state = initState, action) {
         successful: true,
         drivers: action.payload
       }
-    case types.SET_TOTAL:
+    case types.DRIVERS_SET_TOTAL:
       return {
         ...state,
         total: action.payload
       }
-    case types.SET_OFFSET:
+    case types.DRIVERS_SET_OFFSET:
       return {
         ...state,
         offset: action.payload
       }
-    case types.SET_LIMIT:
+    case types.DRIVERS_SET_LIMIT:
       return {
         ...state,
         limit: action.payload
@@ -55,7 +55,7 @@ export default function driversReducer(state = initState, action) {
         successful: true,
         driverInfo: action.payload
       }
-    case types.SET_CURRENT_PAGE:
+    case types.DRIVERS_SET_CURRENT_PAGE:
       return {
         ...state,
         currentPage: action.payload.currentPage,

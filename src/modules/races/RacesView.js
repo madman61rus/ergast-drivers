@@ -1,24 +1,78 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, ActivityIndicator, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import {fetchRacesInfo} from './actions';
+import {fetchRacesInfo,setCurrentPage} from './actions';
 import { Card, CardTitle, CardContent, CardAction, CardButton } from 'react-native-cards';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Paginator from '../../components/paginator/paginator';
 
 class RacesView extends Component {
 
-  componentDidMount() {
-    const { navigation } = this.props;
-    const driverId = navigation.getParam('driverId', '');
+  state = {
+    showPaginator: false
+  }
 
-    this.props.fetchRacesInfo(driverId, 30, 0);
+  componentDidMount() {
+    const driverId = this.props.navigation.getParam('driverId', '');
+
+    this.props.fetchRacesInfo(driverId, 10, this.props.races.offset);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.races.offset != this.props.races.offset){
+      this.setState({
+        showPaginator: false
+      })
+      const driverId = this.props.navigation.getParam('driverId', '');
+      this.props.fetchRacesInfo(driverId, 10, this.props.races.offset);
+    }
+  }
+
+  onPageClick = (index) => {
+    this.props.setCurrentPage(
+      index,
+      this.props.races.total, 
+      this.props.races.limit, 
+      this.props.races.offset)
+  }
+
+  _generatePages = () => {
+    const totalPages = Math.round(this.props.races.total / this.props.races.limit);
+    const currentPage = this.props.races.currentPage
+
+    if (currentPage === 1 && totalPages > 2){
+      return [
+        { number: currentPage, current: true},
+        { number: currentPage + 1},
+        { number: currentPage + 2}
+      ]
+    } else if (currentPage === totalPages && totalPages > 2){
+      return [
+        { number: currentPage - 2},
+        { number: currentPage - 1},
+        { number: currentPage, current: true}
+      ]
+    }else{
+      return [
+        { number: currentPage - 1},
+        { number: currentPage, current: true},
+        { number: currentPage + 1}
+      ]
+    }
   }
 
   _keyExtractor = (item, index) => item.date;
 
+  onViewableItemsChanged = ({ viewableItems, _ }) => {
+    if (viewableItems.slice(-1)[0] && viewableItems.slice(-1)[0].index < this.props.races.races.length - 1 && this.state.showPaginator){
+      this.setState({
+        showPaginator: false
+      })
+    }
+  }
+
   _renderItem = ({item}) => {
-    console.log('item ', item);
     const number = `number: ${item.Results[0].number}`;
     const contentText = 
     `
@@ -42,12 +96,17 @@ class RacesView extends Component {
   </Card>)
   };
 
+  goBack = () => {
+
+    this.props.navigation.goBack()
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
           <View style={styles.navbarIcon}>
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity onPress={() => this.goBack() }>
               <Icon name="chevron-left" size={20} color="#e74c3c" />
             </TouchableOpacity>
           </View>
@@ -66,16 +125,24 @@ class RacesView extends Component {
           renderItem={this._renderItem}
           onEndReachedThreshold={0.2}
           onViewableItemsChanged={this.onViewableItemsChanged}
-          // onEndReached={() => {
-          //   if (!this.state.showPaginator){
-          //     this.setState({
-          //       showPaginator: true
-          //     })
-          //   }
-          // }}
+          onEndReached={() => {
+            if (!this.state.showPaginator){
+              this.setState({
+                showPaginator: true
+              })
+            }
+          }}
 
         />
         }
+        { this.state.showPaginator && 
+        !this.props.races.requesting && 
+        Math.floor(this.props.races.total / this.props.races.limit) > 1 &&
+          <View style={styles.paginator}>
+            <Paginator onPageClick={this.onPageClick} pages={this._generatePages()} />
+          </View>
+        }
+
       </View>
     )
   }
@@ -109,6 +176,10 @@ const styles = EStyleSheet.create({
   navbarIcon: {
     justifyContent: 'flex-start', 
     marginHorizontal: 10
+  },
+  paginator: {
+    flexDirection: 'row', 
+    justifyContent: 'center'
   }
 });
 
@@ -123,6 +194,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchRacesInfo: (driverId, limit, offset) => {
       dispatch(fetchRacesInfo(driverId, limit, offset))
+    },
+    setCurrentPage: (currentPage, total, limit, offset) => {
+      dispatch(setCurrentPage(currentPage, total, limit, offset))
     }
   }
 }

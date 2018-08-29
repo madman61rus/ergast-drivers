@@ -38,21 +38,21 @@ const fetchDriversError = (error) => {
 
 const setTotal = (total) => {
   return {
-    type: types.SET_TOTAL,
+    type: types.DRIVERS_SET_TOTAL,
     payload: total
   }
 }
 
 const setLimit = (limit) => {
   return {
-    type: types.SET_LIMIT,
+    type: types.DRIVERS_SET_LIMIT,
     payload: limit
   }
 }
 
 export const setOffset = (offset) => {
   return {
-    type: types.SET_OFFSET,
+    type: types.DRIVERS_SET_OFFSET,
     payload: offset
   }
 }
@@ -61,7 +61,7 @@ export const setCurrentPage = (currentPage, total, limit, offset) => {
   if (currentPage <= Math.round(total / limit))
   {
     return {
-      type: types.SET_CURRENT_PAGE,
+      type: types.DRIVERS_SET_CURRENT_PAGE,
       payload: {
         currentPage,
         offset: limit * currentPage
@@ -79,12 +79,12 @@ export const fetchDrivers = (limit = 30, offset = 0) => {
 
   axios.get(fullUrl)
     .then((response) => {
-      dispatch(fetchDriversSuccess(response.data.MRData.DriverTable.Drivers))
-      dispatch(setTotal(response.data.MRData.total))
-      dispatch(setLimit(response.data.MRData.limit))
-      dispatch(setOffset(response.data.MRData.offset))
+      dispatch(fetchDriversSuccess(response.data.MRData.DriverTable.Drivers));
+      dispatch(setTotal(response.data.MRData.total));
+      dispatch(setLimit(response.data.MRData.limit));
+      dispatch(setOffset(response.data.MRData.offset));
     }).catch((error) => {
-    dispatch(fetchDriversError(error))
+    dispatch(fetchDriversError(error));
   });
 
   }
@@ -93,16 +93,16 @@ export const fetchDrivers = (limit = 30, offset = 0) => {
 
 export const fetchDriverInfo = (driverId) => {
   return dispatch => {
-  dispatch(driversIsFetching(true))
+  dispatch(driversIsFetching(true));
 
   const fullUrl = SERVER_URL + GET_DRIVER_INFO + `${driverId}.json`;
 
   axios.get(fullUrl)
     .then((response) => {
       console.log('response ', response);
-      dispatch(fetchDriverInfoSuccess(response.data.MRData.DriverTable.Drivers))
+      dispatch(fetchDriverInfoSuccess(response.data.MRData.DriverTable.Drivers));
     }).catch((error) => {
-    dispatch(fetchDriversError(error))
+    dispatch(fetchDriversError(error));
   });
 
   }
